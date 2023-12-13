@@ -10,6 +10,7 @@ public class ProductoDTO {
     private Integer cantidad;
     private BigDecimal precio;
 
+    //Getters y Setters
     public Integer getProductoid() {
         return productoid;
     }

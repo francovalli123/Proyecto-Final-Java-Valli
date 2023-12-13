@@ -17,12 +17,14 @@ public class FacturaController {
     @Autowired
     private FacturaService facturaService;
 
+    //Obtener todas las facturas
     @GetMapping
     public ResponseEntity<List<FacturaDTO>> getAllFacturas() {
         List<FacturaDTO> facturas = facturaService.getAllFacturas();
         return new ResponseEntity<>(facturas, HttpStatus.OK);
     }
 
+    //Obtener facturas por id
     @GetMapping("/{id}")
     public ResponseEntity<?> getFacturaById(@PathVariable Integer id) {
         try {
@@ -33,7 +35,8 @@ public class FacturaController {
         }
     }
 
-    @PostMapping
+    //Crear facturas
+    @PostMapping("/")
     public ResponseEntity<?> createFactura(@RequestBody FacturaDTO facturaDTO) {
         try {
             FacturaDTO createdFactura = facturaService.createFactura(facturaDTO);
@@ -43,7 +46,4 @@ public class FacturaController {
         }
     }
 
-    // Puedes agregar métodos para actualizar y eliminar facturas si es necesario
-
-    // Otros métodos según tus necesidades
 }

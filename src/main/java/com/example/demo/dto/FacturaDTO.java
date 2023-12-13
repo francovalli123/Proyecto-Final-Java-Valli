@@ -18,6 +18,8 @@ public class FacturaDTO {
     private ClienteModel cliente;
     private Set<LineaDTO> lineas;
 
+    //Getters y Setters
+
     public Integer getFacturaid() {
         return facturaid;
     }

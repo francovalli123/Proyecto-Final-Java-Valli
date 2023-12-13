@@ -76,12 +76,12 @@ public class ClienteModel implements Serializable{
         return builder.toString();
     }
 
+    //El metodo se encarga de agregar el nombre del campo y su valor al StringBuilder solo si el valor no es nulo.
     private void appendField(StringBuilder builder, String fieldName, Object fieldValue) {
         if (fieldValue != null) {
             builder.append(fieldName).append("=").append(fieldValue);
         }
         builder.append(", ");
     }
-
 
 }

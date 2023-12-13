@@ -17,6 +17,8 @@ public class LineaDTO {
     private Integer facturaid;
 
 
+    //Getters y Setters
+
     public Integer getFacturaid() {
         return facturaid;
     }
