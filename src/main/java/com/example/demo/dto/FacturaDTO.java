@@ -3,10 +3,7 @@ package com.example.demo.dto;
 import com.example.demo.model.ClienteModel;
 
 import java.math.BigDecimal;
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
 import java.util.Date;
-import java.util.Locale;
 import java.util.Set;
 
 public class FacturaDTO {

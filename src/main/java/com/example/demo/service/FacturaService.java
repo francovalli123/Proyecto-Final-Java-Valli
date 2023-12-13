@@ -3,8 +3,8 @@ package com.example.demo.service;
 
 import com.example.demo.dto.FacturaDTO;
 import com.example.demo.dto.LineaDTO;
-import com.example.demo.dto.ProductoDTO;
 import com.example.demo.exception.RecursoNoEncontradoException;
+import com.example.demo.exception.StockInsuficienteException;
 import com.example.demo.model.ClienteModel;
 import com.example.demo.model.FacturaModel;
 import com.example.demo.model.LineaModel;
@@ -14,19 +14,13 @@ import com.example.demo.repository.FacturaRepository;
 import com.example.demo.repository.LineaRepository;
 import com.example.demo.repository.ProductoRepository;
 import com.example.demo.wordclock.WordClock;
-import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.math.BigDecimal;
-import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @Service
@@ -114,6 +108,7 @@ public class FacturaService {
 
     }
 
+    //Obtener la fecha
     private Date obtenerFecha() {
         WordClock worldClock = restTemplate.getForObject("http://worldclockapi.com/api/json/utc/now", WordClock.class);
 
@@ -129,7 +124,7 @@ public class FacturaService {
         }
     }
 
-
+    //Toma un objeto FacturaModel y lo convierte en un objeto FacturaDTO
     private FacturaDTO convertirFacturaModelADTO(FacturaModel facturaModel) {
         FacturaDTO facturaDTO = new FacturaDTO();
         facturaDTO.setFacturaid(facturaModel.getFacturaid());
@@ -141,6 +136,7 @@ public class FacturaService {
         return facturaDTO;
     }
 
+    //Toma un conjunto de objetos LineaModel y los convierte en un conjunto de objetos DTO
     private Set<LineaDTO> convertirLineasModelADTO(Set<LineaModel> lineasModel) {
         Set<LineaDTO> lineasDTO = new HashSet<>();
         for (LineaModel lineaModel : lineasModel) {
@@ -171,7 +167,7 @@ public class FacturaService {
         return convertirFacturaModelADTO(facturaModel);
     }
 
-
+    //Toma una lista de objetos FacturaModel y las convierte en una lista de objetos FacturaDTO
     private List<FacturaDTO> convertirFacturasModelADTO(List<FacturaModel> facturasModel) {
         List<FacturaDTO> facturasDTO = new ArrayList<>();
         for (FacturaModel facturaModel : facturasModel) {
@@ -180,10 +176,20 @@ public class FacturaService {
         return facturasDTO;
     }
 
+    //Actualizar el stock
     private void actualizarStock(Set<LineaModel> lineasModel) {
         for (LineaModel lineaModel : lineasModel) {
             ProductoModel producto = lineaModel.getProducto();
-            producto.setCantidad(producto.getCantidad() - lineaModel.getCantidad());
+            int cantidadVenta = lineaModel.getCantidad();
+
+            //Verificar si hay suficiente stock
+            if (producto.getCantidad() < cantidadVenta) {
+                //Error en caso de que no haya stock
+                throw new StockInsuficienteException("Stock insuficiente para el producto: " + producto.getDescripcion());
+            }
+
+            // Actualizar el stock
+            producto.setCantidad(producto.getCantidad() - cantidadVenta);
             productoRepository.save(producto);
         }
     }
