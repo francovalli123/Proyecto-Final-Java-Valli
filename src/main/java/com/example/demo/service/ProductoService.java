@@ -40,6 +40,26 @@ public class ProductoService {
         }
     }
 
+    //Update
+    public ProductoModel update(Integer productoid, ProductoModel productoActualizado) {
+        if (productoid == null || productoid <= 0) {
+            throw new IllegalArgumentException("El ID proporcionado no es válido.");
+        }
+
+        Optional<ProductoModel> opProducto = productoRepository.findById(productoid);
+
+        if (opProducto.isPresent()) {
+            ProductoModel productoExistente = opProducto.get();
+            productoExistente.setDescripcion(productoActualizado.getDescripcion());
+            productoExistente.setDescripcion(productoActualizado.getDescripcion());
+            productoExistente.setPrecio(productoActualizado.getPrecio());
+            productoExistente.setCantidad(productoActualizado.getCantidad());
+
+            return productoRepository.save(productoExistente);
+        } else {
+            throw new RecursoNoEncontradoException("Producto no encontrado con ID: " + productoid);
+        }
+    }
 
 
 

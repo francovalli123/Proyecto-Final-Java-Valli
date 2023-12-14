@@ -182,13 +182,13 @@ public class FacturaService {
             ProductoModel producto = lineaModel.getProducto();
             int cantidadVenta = lineaModel.getCantidad();
 
-            //Verificar si hay suficiente stock
-            if (producto.getCantidad() < cantidadVenta) {
-                //Error en caso de que no haya stock
+            //Primero verifica si hay suficiente stock
+            if (producto.getCantidad() <= cantidadVenta) {
+                //Si no hay stock, lanza un error.
                 throw new StockInsuficienteException("Stock insuficiente para el producto: " + producto.getDescripcion());
             }
 
-            // Actualizar el stock
+            //Si hay stock, lo actualiza
             producto.setCantidad(producto.getCantidad() - cantidadVenta);
             productoRepository.save(producto);
         }

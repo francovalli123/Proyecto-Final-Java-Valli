@@ -34,4 +34,11 @@ public class ProductoController {
     public ProductoModel create(@RequestBody ProductoModel producto) {
         return this.productoService.create(producto);
     }
+
+    //Actualizar productos ya existentes
+    @PutMapping("/{id}")
+    public ResponseEntity<ProductoModel> update(@PathVariable Integer id, @RequestBody ProductoModel producto) {
+        ProductoModel productoActualizado = productoService.update(id, producto);
+        return new ResponseEntity<>(productoActualizado, HttpStatus.OK);
+    }
 }
