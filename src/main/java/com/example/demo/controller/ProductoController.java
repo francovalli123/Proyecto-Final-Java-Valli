@@ -41,4 +41,11 @@ public class ProductoController {
         ProductoModel productoActualizado = productoService.update(id, producto);
         return new ResponseEntity<>(productoActualizado, HttpStatus.OK);
     }
+
+    //Borrar productos ya existentes
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Integer id) {
+        productoService.delete(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
 }

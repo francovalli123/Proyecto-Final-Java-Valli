@@ -35,4 +35,18 @@ public class ClienteController {
         return this.clienteService.create(cliente);
     }
 
+    //Modificar clientes
+    @PutMapping("/{id}")
+    public ResponseEntity<ClienteModel> update(@PathVariable Integer id, @RequestBody ClienteModel cliente) {
+        ClienteModel clienteActualizado = clienteService.update(id, cliente);
+        return new ResponseEntity<>(clienteActualizado, HttpStatus.OK);
+    }
+
+    //Borrar clientes ya existentes
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Integer id) {
+        clienteService.delete(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
 }

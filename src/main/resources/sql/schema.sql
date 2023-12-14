@@ -13,25 +13,25 @@ CREATE TABLE producto (
     codigo int NOT NULL,
     descripcion varchar(255) NOT NULL,
     cantidad int,
-    precio FLOAT(5, 2)
+    precio FLOAT(8, 2)
 );
 
 CREATE TABLE factura (
-    id int primary key NOT NULL AUTO_INCREMENT,
+    facturaid int primary key NOT NULL AUTO_INCREMENT,
     fecha datetime,
     cantidad int,
-    total FLOAT(5, 2),
+    total FLOAT(8, 2),
     clienteid int,
-    CONSTRAINT FK_cliente FOREIGN KEY (clienteid) REFERENCES cliente(clienteid)
+    CONSTRAINT FKfactura_cliente FOREIGN KEY (clienteid) REFERENCES cliente(clienteid)
 );
 
 CREATE TABLE linea (
     lineaid int primary key NOT NULL AUTO_INCREMENT,
-    descripcion varchar(255) NOT NULL,
+    descripcion varchar(255),
     cantidad int,
-    precio FLOAT(5, 2),
-    facturaid int NOT NULL,
-    productoid int NOT NULL,
+    precio FLOAT(8, 2),
+    facturaid int not null,
+    productoid int not null,
     CONSTRAINT FK_factura FOREIGN KEY (facturaid) REFERENCES factura(facturaid),
     CONSTRAINT FK_producto FOREIGN KEY (productoid) REFERENCES producto(productoid)
 );

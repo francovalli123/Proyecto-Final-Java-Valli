@@ -40,7 +40,7 @@ public class ProductoService {
         }
     }
 
-    //Update
+    //Update, no se modifican las facturas ya existentes
     public ProductoModel update(Integer productoid, ProductoModel productoActualizado) {
         if (productoid == null || productoid <= 0) {
             throw new IllegalArgumentException("El ID proporcionado no es válido.");
@@ -61,6 +61,20 @@ public class ProductoService {
         }
     }
 
+    //Delete, no se borran las facturas ya existentes
+    public void delete(Integer productoid) {
+        if (productoid == null || productoid <= 0) {
+            throw new IllegalArgumentException("El ID proporcionado no es válido.");
+        }
+
+        Optional<ProductoModel> opProducto = productoRepository.findById(productoid);
+
+        if (opProducto.isPresent()) {
+            productoRepository.deleteById(productoid);
+        } else {
+            throw new RecursoNoEncontradoException("Producto no encontrado con ID: " + productoid);
+        }
+    }
 
 
 }

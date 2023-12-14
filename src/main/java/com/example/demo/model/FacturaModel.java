@@ -28,7 +28,7 @@ public class FacturaModel implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date fecha;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "clienteid", referencedColumnName = "clienteid")
     private ClienteModel cliente;
 
