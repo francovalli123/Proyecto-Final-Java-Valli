@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 
 public class ProductoDTO {
 
+    //Atributos
     private Integer productoid;
     private Integer codigo;
     private String descripcion;

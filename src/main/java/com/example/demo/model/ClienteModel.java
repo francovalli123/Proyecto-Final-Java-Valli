@@ -14,6 +14,7 @@ public class ClienteModel implements Serializable{
     @Serial
     private static final long serialVersionUID = 1L;
 
+    //Atributos
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer clienteid;

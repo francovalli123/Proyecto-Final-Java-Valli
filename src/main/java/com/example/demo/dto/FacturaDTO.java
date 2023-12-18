@@ -8,6 +8,7 @@ import java.util.Set;
 
 public class FacturaDTO {
 
+    //Atributos
     private Integer facturaid;
     private Integer cantidad;
     private Date fecha;

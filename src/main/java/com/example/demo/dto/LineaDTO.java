@@ -7,6 +7,7 @@ import java.math.BigDecimal;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class LineaDTO {
 
+    //Atributos
     private Integer lineaid;
     private Integer cantidad;
     private String descripcion;
