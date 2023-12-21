@@ -16,6 +16,7 @@ import com.example.demo.repository.ProductoRepository;
 import com.example.demo.wordclock.WordClock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import java.math.BigDecimal;
@@ -110,18 +111,31 @@ public class FacturaService {
 
     //Obtener la fecha
     private Date obtenerFecha() {
-        WordClock worldClock = restTemplate.getForObject("http://worldclockapi.com/api/json/utc/now", WordClock.class);
+        int maxRetries = 3;
+        int retryCount = 0;
 
-        String currentDateTime = worldClock.getCurrentDateTime();
-
-        try {
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm'Z'");
-            dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
-            return dateFormat.parse(currentDateTime);
-        } catch (ParseException e) {
-            e.printStackTrace();
-            return new Date();
+        //Se realizan intentos de usar WordClock, si no responde se usa Date()
+        while (retryCount < maxRetries) {
+            try {
+                WordClock worldClock = restTemplate.getForObject("http://worldclockapi.com/api/json/utc/now", WordClock.class);
+                String currentDateTime = worldClock.getCurrentDateTime();
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm'Z'");
+                dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+                return dateFormat.parse(currentDateTime);
+            } catch (HttpServerErrorException e) {
+                retryCount++;
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException ex) {
+                    Thread.currentThread().interrupt();
+                }
+            } catch (ParseException e) {
+                e.printStackTrace();
+                return new Date();
+            }
         }
+
+        throw new RuntimeException("No se pudo acceder al servicio WorldClock");
     }
 
     //Toma un objeto FacturaModel y lo convierte en un objeto FacturaDTO
